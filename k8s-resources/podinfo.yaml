@@ -1,0 +1,29 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: podinfo  
+  namespace: examples-namespaced-flux
+
+spec:
+  releaseName: podinfo
+  chart:
+    repository: https://stefanprodan.github.io/podinfo/
+    name: podinfo
+    targetNamespace: examples-namespaced-flux
+    wait: True
+    
+    version: 4.0.6
+  values:
+    ingress:
+      enabled: True
+      annotations: 
+        kubernetes.io/ingress.class: nginx
+        cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    hosts:
+      - podinfo.examples.svc.dev.lightricks.com
+    tls:
+      - hosts:
+          - podinfo.examples.svc.dev.lightricks.com
+        secretName: podinfo-cert  
+    image:
+      repository: stefanprodan/podinfo
