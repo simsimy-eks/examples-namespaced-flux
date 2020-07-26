@@ -12,7 +12,7 @@ spec:
     repository: s3://lightricks-helm-repo/simsimy
     targetNamespace: podinfo
     wait: True
-    version: 4.0.6-simsimy
+    version: 4.0.6
   values:
     image:
       repository: stefanprodan/podinfo
