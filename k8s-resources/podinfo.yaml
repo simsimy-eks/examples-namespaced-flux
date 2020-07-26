@@ -14,6 +14,8 @@ spec:
     wait: True
     version: 4.0.6
   values:
+    service:
+      externalPort: 9898
     image:
       repository: stefanprodan/podinfo
       tag: 4.0.6
