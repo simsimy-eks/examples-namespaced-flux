@@ -9,37 +9,44 @@ spec:
   targetNamespace: examples-namespaced-flux
   chart:
     name: podinfo
-    repository: https://stefanprodan.github.io/podinfo
+    repository: s3://lightricks-helm-repo/simsimy
     targetNamespace: podinfo
     wait: True
-    version: 4.0.6
+    version: 4.0.6-simsimy
   values:
     image:
       repository: stefanprodan/podinfo
       tag: 4.0.6
     ingress:
-      enabled: False
+      enabled: True
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        cert-manager.io/cluster-issuer: "letsencrypt-prod"
+      tls:
+        - hosts:
+            - podinfo.examples.svc.dev.lightricks.com
+          secretName: podinfo-k8s
       # There is a bug in the helm that breaks ingress.
       # See: https://github.com/stefanprodan/podinfo/pull/90
 
----
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
-metadata:
-  name: podinfo2
-  namespace: examples-namespaced-flux
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-spec:
-  tls:
-    - hosts:
-        - podinfo.examples.svc.dev.lightricks.com
-      secretName: podinfo-k8s
-  rules:
-    - host: podinfo.examples.svc.dev.lightricks.com
-      http:
-        paths:
-          - backend:
-              serviceName: examples-namespaced-flux-podinfo
-              servicePort: 9898
+#---
+#apiVersion: networking.k8s.io/v1beta1
+#kind: Ingress
+#metadata:
+#  name: podinfo2
+#  namespace: examples-namespaced-flux
+#  annotations:
+#    kubernetes.io/ingress.class: nginx
+#    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+#spec:
+#  tls:
+#    - hosts:
+#        - podinfo.examples.svc.dev.lightricks.com
+#      secretName: podinfo-k8s
+#  rules:
+#    - host: podinfo.examples.svc.dev.lightricks.com
+#      http:
+#        paths:
+#          - backend:
+#              serviceName: examples-namespaced-flux-podinfo
+#              servicePort: 9898
