@@ -6,16 +6,17 @@ metadata:
 
 
 spec:
-  targetNamespace: examples-namespaced-flux
+  forceUpgrade: True
+  resetValues: True
+  releaseName: podinfo
   chart:
     name: podinfo
     repository: s3://lightricks-helm-repo/simsimy
     targetNamespace: podinfo
     wait: True
     version: 4.0.6
+
   values:
-    service:
-      externalPort: 9898
     image:
       repository: stefanprodan/podinfo
       tag: 4.0.6
